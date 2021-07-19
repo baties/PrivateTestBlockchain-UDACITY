@@ -65,6 +65,7 @@ class Blockchain {
         let self = this;
         return new Promise(async (resolve, reject) => {
            block.height = self.chain.length ;
+           console.log(new Date().getTime().toString) ;
            block.time = new Date().getTime().toString.slice(0,-3) ;
            if (self.chain.length > 0) {
                block.previousBlockHash = self.chain[self.chain.length-1].hash ;
@@ -146,12 +147,12 @@ class Blockchain {
     getBlockByHash(hash) {
         let self = this;
         return new Promise((resolve, reject) => {
-            let resultBlock = self.chain.find(block => (block.hash === hash))
-            if (resultBlock != undefined){
-                resolve(resultBlock) ;
+            let Block = self.chain.find(p => (p.hash === hash)) ;
+            if (Block != undefined){
+                resolve(Block) ;
             }
             else{
-                reject(Error('No Block with the given Hash is Found !')) ;
+                reject(Error('This Block Hash is not Found !')) ;
             }
         });
     }
@@ -183,7 +184,18 @@ class Blockchain {
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
-            
+            self.chain.forEach(block => {
+                let bData = block.getBData() ;
+                if (bData != undefined && bData.address == address) {
+                    stars.push(bData) ;
+                }
+            })
+            if (stars != []){
+                resolve(stars) ;
+            }
+            else{
+                reject(Error('No Stars with this Address is Found !')) ;
+            }
         });
     }
 
@@ -197,7 +209,25 @@ class Blockchain {
         let self = this;
         let errorLog = [];
         return new Promise(async (resolve, reject) => {
-            
+            self.chain.forEach((block, index) => {
+                if (block.validate()){
+                    if (block.height > 0){
+                        let previousBlockHash = self.chain[index - 1].hash ;
+                        if (block.previousBlockHash != previousBlockHash){
+                            errorLog.push(block.height) ;
+                        }
+                    }
+                }
+                else {
+                    errorLog.push(block.height) ;
+                }
+            })
+            if (errorLog != []){
+                resolve(errorLog) ;
+            }
+            else{
+                resolve('The Chain is Validated, No Error is Found !') ;
+            }
         });
     }
 

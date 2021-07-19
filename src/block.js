@@ -45,7 +45,7 @@ class Block {
             if (calculatedHash){
                 // Comparing if the hashes changed
                 // Returning the Block is not valid
-                if (currentHash != calculatedHash){
+                if (currentHash !== calculatedHash){
                     resolve(false) ;
                 }
                 // Returning the Block is valid
