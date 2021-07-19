@@ -64,7 +64,18 @@ class Blockchain {
     _addBlock(block) {
         let self = this;
         return new Promise(async (resolve, reject) => {
-           
+           block.height = self.chain.length ;
+           block.time = new Date().getTime().toString.slice(0,-3) ;
+           if (self.chain.length > 0) {
+               block.previousBlockHash = self.chain[self.chain.length-1].hash ;
+           }
+           else{
+               block.previousBlockHash = null ;
+           }
+           block.hash = SHA256(JSON.stringify(block)).toString ;
+           self.chain.push(block) ;
+           self.height = self.height + 1 ;
+           resolve(block) ;
         });
     }
 
@@ -78,7 +89,9 @@ class Blockchain {
      */
     requestMessageOwnershipVerification(address) {
         return new Promise((resolve) => {
-            
+            let time = new Date().getTime().toString().slice(0, -3) ;
+            let MessageOwnership = address + ':' + time + ':starRegistry' ;
+            resolve(MessageOwnership) ;  
         });
     }
 
@@ -102,7 +115,25 @@ class Blockchain {
     submitStar(address, message, signature, star) {
         let self = this;
         return new Promise(async (resolve, reject) => {
-            
+            let messageTime = parseInt(message.split(':')[1]) ;
+            let currentTime = parseInt(new Date().getTime().toString().slice(0, -3)) ;
+            let eligibleTime = (5 * 60) ; // 5 Minutes 
+            let elapsedTime = (currentTime - messageTime) ;
+            if (elapsedTime < eligibleTime) {
+                isVerify = bitcoinMessage.verify(message, address, signature) ;
+                if (isVerify) {
+                    let data = {address: address, message: message, signature: signature, star: star} ;
+                    let newblock = new BlockClass.Block(data) ;
+                    await self._addBlock(newblock) ;
+                    resolve(block) ;
+                }
+                else{
+                    reject('The Block is not Verified !') ;
+                }
+            }
+            else{
+                reject(Error('More Than 5 Mins is not Allowed !')) ;
+            }
         });
     }
 
@@ -115,7 +146,13 @@ class Blockchain {
     getBlockByHash(hash) {
         let self = this;
         return new Promise((resolve, reject) => {
-           
+            let resultBlock = self.chain.find(block => (block.hash === hash))
+            if (resultBlock != undefined){
+                resolve(resultBlock) ;
+            }
+            else{
+                reject(Error('No Block with the given Hash is Found !')) ;
+            }
         });
     }
 
