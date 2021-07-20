@@ -35,7 +35,9 @@ class Blockchain {
      */
     async initializeChain() {
         if( this.height === -1){
+            console.log('Genesis Block Creation...') ;
             let block = new BlockClass.Block({data: 'Genesis Block'});
+            console.log(block) ;
             await this._addBlock(block);
         }
     }
@@ -45,6 +47,7 @@ class Blockchain {
      */
     getChainHeight() {
         return new Promise((resolve, reject) => {
+            console.log('Chain Height is ' + this.height) ;
             resolve(this.height);
         });
     }
@@ -63,6 +66,7 @@ class Blockchain {
      */
     _addBlock(block) {
         let self = this;
+        console.log('Add a new Block to the Chain ....') ;
         return new Promise(async (resolve, reject) => {
            block.height = self.chain.length ;
            block.time = new Date().getTime().toString().slice(0,-3) ;
@@ -73,6 +77,7 @@ class Blockchain {
                block.previousBlockHash = null ;
            }
            block.hash = SHA256(JSON.stringify(block)).toString() ;
+           console.log(block) ;
            self.chain.push(block) ;
            self.height = self.height + 1 ;
            resolve(block) ;
@@ -91,6 +96,8 @@ class Blockchain {
         return new Promise((resolve) => {
             let time = new Date().getTime().toString().slice(0, -3) ;
             let MessageOwnership = address + ':' + time + ':starRegistry' ;
+            console.log('Chain Owner Ship : ') ;
+            console.log(MessageOwnership) ;
             resolve(MessageOwnership) ;  
         });
     }
@@ -113,6 +120,7 @@ class Blockchain {
      * @param {*} star 
      */
     submitStar(address, message, signature, star) {
+        console.log('Submit Star .....') ;
         let self = this;
         return new Promise(async (resolve, reject) => {
             let messageTime = parseInt(message.split(':')[1]) ;
@@ -144,13 +152,17 @@ class Blockchain {
      * @param {*} hash 
      */
     getBlockByHash(hash) {
+        console.log('Get Block by Hash ....') ;
         let self = this;
         return new Promise((resolve, reject) => {
+            console.log('Searching Hash is ' + hash) ;
             let Block = self.chain.find(p => (p.hash === hash)) ;
             if (Block != undefined){
+                console.log(Block) ;
                 resolve(Block) ;
             }
             else{
+                console.log('Block is Not Found !') ;
                 reject(Error('This Block Hash is not Found !')) ;
             }
         });
@@ -162,12 +174,15 @@ class Blockchain {
      * @param {*} height 
      */
     getBlockByHeight(height) {
+        console.log('Get Block by Height ....') ;
         let self = this;
         return new Promise((resolve, reject) => {
             let block = self.chain.filter(p => p.height === height)[0];
             if(block){
+                console.log(block) ;
                 resolve(block);
             } else {
+                console.log('This Block Height is Not Found !') ;
                 resolve(null);
             }
         });
@@ -180,6 +195,7 @@ class Blockchain {
      * @param {*} address 
      */
     getStarsByWalletAddress (address) {
+        console.log('Get Star by Wallet Address ...') ;
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
@@ -205,6 +221,7 @@ class Blockchain {
      * 2. Each Block should check the with the previousBlockHash
      */
     validateChain() {
+        console.log('Chain Validatation .....') ;
         let self = this;
         let errorLog = [];
         return new Promise(async (resolve, reject) => {
