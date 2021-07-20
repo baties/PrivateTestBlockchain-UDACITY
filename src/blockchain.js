@@ -125,7 +125,7 @@ class Blockchain {
         return new Promise(async (resolve, reject) => {
             let messageTime = parseInt(message.split(':')[1]) ;
             let currentTime = parseInt(new Date().getTime().toString().slice(0, -3)) ;
-            let eligibleTime = (50 * 60) ; // 5 Minutes 
+            let eligibleTime = (5 * 60) ; // 5 Minutes 
             let elapsedTime = (currentTime - messageTime) ;
             console.log(elapsedTime) ;
             if (elapsedTime < eligibleTime) {
