@@ -125,15 +125,21 @@ class Blockchain {
         return new Promise(async (resolve, reject) => {
             let messageTime = parseInt(message.split(':')[1]) ;
             let currentTime = parseInt(new Date().getTime().toString().slice(0, -3)) ;
-            let eligibleTime = (5 * 60) ; // 5 Minutes 
+            let eligibleTime = (50 * 60) ; // 5 Minutes 
             let elapsedTime = (currentTime - messageTime) ;
+            console.log(elapsedTime) ;
             if (elapsedTime < eligibleTime) {
-                isVerify = bitcoinMessage.verify(message, address, signature) ;
+                console.log(message) ;
+                console.log(address) ;
+                console.log(signature) ;
+                let isVerify = bitcoinMessage.verify(message, address, signature) ;
                 if (isVerify) {
                     let data = {address: address, message: message, signature: signature, star: star} ;
+                    console.log(data) ;
                     let newblock = new BlockClass.Block(data) ;
+                    console.log(newblock) ;
                     await self._addBlock(newblock) ;
-                    resolve(block) ;
+                    resolve(newblock) ;
                 }
                 else{
                     reject('The Block is not Verified !') ;
@@ -195,16 +201,19 @@ class Blockchain {
      * @param {*} address 
      */
     getStarsByWalletAddress (address) {
-        console.log('Get Star by Wallet Address ...') ;
+        console.log('Get Star for Wallet Address :: ' + address) ;
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
             self.chain.forEach(block => {
                 let bData = block.getBData() ;
                 if (bData != undefined && bData.address == address) {
+                    console.log('Block is Added ....') ;
                     stars.push(bData) ;
                 }
             })
+            console.log('The Chain is : ')
+            console.log(stars) ;
             if (stars != []){
                 resolve(stars) ;
             }
