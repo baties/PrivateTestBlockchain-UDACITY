@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "21615de8-6c9a-46d0-9453-f0e323f361f8",
+		"name": "myStarBlockChain",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get BlockHeight",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8000/block/height/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"block",
+						"height",
+						"0"
+					]
+				},
+				"description": "Finding Block by Height :\nhttp://localhost:8000/block/height/0"
+			},
+			"response": []
+		},
+		{
+			"name": "Request Validation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\":\"n4RptB6sZ21V16ZUqjgMKXcoJXKaLRbZuH\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/requestValidation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"requestValidation"
+					]
+				},
+				"description": "Request Validation :\nhttp://localhost:8000/requestValidation"
+			},
+			"response": []
+		},
+		{
+			"name": "SubmitStar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\":\"n4RptB6sZ21V16ZUqjgMKXcoJXKaLRbZuH\",\n    \"signature\":\"H3ogML1mLWpvxYyNXROSBbmNCNjw/waeXbCb6L5JTq3LOHLQGJOIHQ3O8DEeZ3UhTAZdV8NKoPiDDK5cbnxJDMs=\",\n    \"message\":\"n4RptB6sZ21V16ZUqjgMKXcoJXKaLRbZuH:1626770885:starRegistry\",\n    \"star\": {\n             \"dec\": \"68° 52' 56.9\",\n             \"ra\": \"16h 29m 1.0s\",\n             \"story\": \"Testing the story 2\"\n     }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/submitstar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"submitstar"
+					]
+				},
+				"description": "Submit my Stars in BlockChain :\nhttp://localhost:8000/submitstar"
+			},
+			"response": []
+		},
+		{
+			"name": "Request Stars",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/blocks/n4RptB6sZ21V16ZUqjgMKXcoJXKaLRbZuH",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"blocks",
+						"n4RptB6sZ21V16ZUqjgMKXcoJXKaLRbZuH"
+					]
+				},
+				"description": "Request my Stars From BlockChain :\nhttp://localhost:8000/blocks/bc1qqy5urn07rdwu2f24ra8p4yxmd5lryqd74328s0"
+			},
+			"response": []
+		}
+	]
+}
